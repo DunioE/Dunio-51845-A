@@ -119,15 +119,28 @@ public class Bot : MonoBehaviour
         float distance = 100.0f; //Não pode ser menor que 10 (número em cima)
         hideCol.Raycast(backRay, out info, distance);
 
-        Seek(info.point + chosenDir.normalized * 5);
+        Seek(info.point + chosenDir.normalized * 2); //proximidade ao objeto
 
+    }
+
+    bool CanSeeTarget()
+    {
+        RaycastHit raycastinfo;
+        Vector3 rayToTarget = target.transform.position - this.transform.position;
+        if (Physics.Raycast(this.transform.position, rayToTarget, out raycastinfo))
+        {
+            if (raycastinfo.transform.gameObject.tag == "cop")
+                return true;
+        }
+        return false;
     }
 
 
     // Update is called once per frame
     void Update()
     {
-        CleverHide();
+        if (CanSeeTarget())
+            CleverHide();
 
     }
 }
